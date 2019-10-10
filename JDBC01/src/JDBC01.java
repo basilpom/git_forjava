@@ -28,7 +28,7 @@ public class JDBC01 {
 					+ " where id = '1792012'";
 			stmt.executeUpdate(sql);
 
-
+			//CURSOR 역할
 			ResultSet rs = stmt.executeQuery("select * from student");
 			while(rs.next())	//EOF가 되면 rs.next()는 false
 			{

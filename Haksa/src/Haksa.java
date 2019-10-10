@@ -61,7 +61,39 @@ public class Haksa extends JFrame{
 					JOptionPane.showMessageDialog(null, "정보 등록 완료!");
 				}
 
-			}});
+			}
+			
+			//JDBC
+			JButton btnList = new JButton("목록");
+			btnList.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Connection conn = null;
+					Statement stmt = null;
+					
+					try
+					{
+						Class.forName("oracle.jdbc.driver.OracleDriver");
+						conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "ora_user", "hong");
+						stmt = conn.createStatement();
+						ResultSet rs = stmt.executeQuery("SELECT * FROM STUDENT");
+						
+						while(rs.next())
+						{
+							
+						}
+					}
+					catch(Exception e1)
+					{
+						ex.printStackTrace();
+					}
+					
+				}
+			})
+		
+		
+		});
 
 		c.add(btnInsert);
 		
