@@ -16,14 +16,19 @@ public class PieChart extends JPanel {
 		conn = db.getConnection();
 		
 		setLayout(new BorderLayout());
-		
-		add(chartPanel, BorderLayout.CENTER);
-		
+		JLabel titleLabel = new JLabel("학과별 도서 대출 현황");
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
 
-		this.setSize(600, 500);
+
+		add(titleLabel, BorderLayout.NORTH);
+		add(chartPanel, BorderLayout.CENTER);
+
+		this.setSize(500, 500);
 		this.setVisible(true);
 		
 	}
+	
 	
 	class ChartPanel extends JPanel
 	{

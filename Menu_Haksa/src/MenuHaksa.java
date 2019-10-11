@@ -43,6 +43,7 @@ public class MenuHaksa extends JFrame{
 				
 		this.setTitle("학사관리");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		
 		//MENU
 		JMenuBar mb = new JMenuBar();
@@ -80,6 +81,7 @@ public class MenuHaksa extends JFrame{
 				panel.add(new BookRent());	// 화면 생성!!!!!!!!
 				panel.setLayout(null);
 				
+				
 			}});
 		book.add(bItem1);
 		
@@ -95,6 +97,7 @@ public class MenuHaksa extends JFrame{
 				panel.add(new PieChart());	// 화면 생성!!!!!!!!
 				panel.setLayout(null);
 				//각 과별로 대출... 웅앵...
+				
 				
 			}});
 		book.add(bItem2);
