@@ -78,6 +78,7 @@ public class PieChart extends JPanel {
 			//color array로 하고싶은데...
 			//Color[] chartColor = {new Color(100,20,30), new Color(10,200,30), new Color(10,20,300)};
 			
+
 			super.paintComponent(g);
 			try 
 			{
@@ -90,6 +91,7 @@ public class PieChart extends JPanel {
 				int angleSum = 0;
 				for (int i = 0; i < rowCount; i++)
 				{
+					g.setColor(Color.black);
 					g.drawString(dept[i], 380, 140 + 20*i);	//legend_name
 					g.setColor(new Color(i*60, 100, 100));
 					g.fillArc(30, 20, 300, 300, angleSum, 360*bookCount[i]/sum + 1);

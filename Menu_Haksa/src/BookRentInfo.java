@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 
-public class BookRent extends JPanel{
+public class BookRentInfo extends JPanel{
 	DefaultTableModel model = null;
 	JTable table = null;
 	//Connection conn = MenuHaksa.conn;
@@ -24,7 +24,7 @@ public class BookRent extends JPanel{
 	String query;
 	Connection conn = null;
 	
-	public BookRent()
+	public BookRentInfo()
 	{
 		query = "SELECT BOOKRENT.NO, STUDENT.NAME, BOOKS.TITLE, BOOKRENT.RDATE" + 
 				"  FROM STUDENT, BOOKS, BOOKRENT" + 
@@ -35,7 +35,6 @@ public class BookRent extends JPanel{
 		conn = db.getConnection();
 
 		
-
 	    setLayout(null);//레이아웃설정. 레이아웃 사용 안함.
 	   
 	    JLabel l_dept=new JLabel("학과");

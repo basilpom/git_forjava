@@ -50,6 +50,7 @@ public class MenuHaksa extends JFrame{
 		JMenu student = new JMenu("학생관리");
 		JMenuItem sItem1 = new JMenuItem("학생정보");
 		
+		
 		sItem1.addActionListener(new ActionListener() {
 
 			@Override
@@ -68,9 +69,24 @@ public class MenuHaksa extends JFrame{
 		mb.add(student);		// 2. 메뉴바에 메뉴 부착
 		
 		JMenu book = new JMenu("도서관리");
-		JMenuItem bItem1 = new JMenuItem("대출정보");
 		
-		bItem1.addActionListener(new ActionListener() {
+		JMenuItem bItemRentAndReturn = new JMenuItem("대출/반납");
+		bItemRentAndReturn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//대출반납넣어라~~~
+				panel.removeAll();
+				panel.revalidate();
+				panel.repaint();
+				panel.add(new RentReturn());
+				panel.setLayout(null);
+			}
+		});
+		book.add(bItemRentAndReturn);
+		
+		JMenuItem bItemInfo = new JMenuItem("대출정보");
+		bItemInfo.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -78,15 +94,15 @@ public class MenuHaksa extends JFrame{
 				panel.removeAll();			// 모든 컴포넌트 삭제
 				panel.revalidate();			// 다시 활성화
 				panel.repaint();			// 다시 그리기
-				panel.add(new BookRent());	// 화면 생성!!!!!!!!
+				panel.add(new BookRentInfo());	// 화면 생성!!!!!!!!
 				panel.setLayout(null);
 				
 				
 			}});
-		book.add(bItem1);
+		book.add(bItemInfo);
 		
-		JMenuItem bItem2 = new JMenuItem("대출현황");
-		bItem2.addActionListener(new ActionListener() {
+		JMenuItem bItemChart = new JMenuItem("대출현황");
+		bItemChart.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +116,7 @@ public class MenuHaksa extends JFrame{
 				
 				
 			}});
-		book.add(bItem2);
+		book.add(bItemChart);	
 		mb.add(book);
 		
 		
