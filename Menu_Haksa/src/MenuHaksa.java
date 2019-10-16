@@ -1,11 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -165,7 +164,9 @@ public class MenuHaksa extends JFrame{
 		*/
 		
 		
-		
+		ImageIcon catIcon = new ImageIcon("img/cat.png");
+		JLabel welcome = new JLabel(catIcon);
+		this.add(welcome);
 		
 		this.setSize(600, 600);
 		this.setVisible(true);

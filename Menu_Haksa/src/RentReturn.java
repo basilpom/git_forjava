@@ -7,6 +7,8 @@ import java.sql.*;
 
 public class RentReturn extends JPanel{
 	Connection conn = null;
+	DefaultTableModel bookModel = null;
+	JTable bookTable = null;
 	
 	public RentReturn()
 	{
@@ -30,7 +32,6 @@ public class RentReturn extends JPanel{
 		rentPanel.add(tfBookSearch);
 		JButton btnBookSearch = new JButton("검색");
 		rentPanel.add(btnBookSearch);
-		// btn listener 붙이기
 		btnBookSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -40,9 +41,16 @@ public class RentReturn extends JPanel{
 				{
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery("SELECT * FROM BOOKS WHERE TITLE LIKE '%"+tfBookSearch.getText()+"%'");
-					
-					
-					
+					bookModel.setNumRows(0);
+					while(rs.next())
+					{
+						String[] row = new String[3];
+						row[0] = rs.getString("NO");
+						row[1] = rs.getString("TITLE");
+						row[2] = rs.getString("AUTHOR");
+						bookModel.addRow(row);
+					}
+					rs.close();					
 				}
 				catch(Exception e1)
 				{
@@ -53,15 +61,20 @@ public class RentReturn extends JPanel{
 		
 		rentPanel.add(new JLabel("대출 가능한 책 목록"));
 		String bookColName[] = {"책번호", "도서명", "저자"};	
-		DefaultTableModel bookModel = new DefaultTableModel(bookColName,0);
-		JTable bookTable = new JTable(bookModel);
+		bookModel = new DefaultTableModel(bookColName,0);
+		bookTable = new JTable(bookModel);
 		bookTable.setPreferredScrollableViewportSize(new Dimension(255,100));
 		rentPanel.add(new JScrollPane(bookTable));
 		bookTable.addMouseListener(new MouseListener() {
  
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//여기다가 웅앵웅앵
+				bookTable = (JTable)e.getComponent();
+				bookModel = (DefaultTableModel)bookTable.getModel();
+				
+				String title = (String)bookModel.getValueAt(bookTable.getSelectedRow(), 1);
+				tfBookSearch.setText(title);
+				
 			}
 
 			@Override
