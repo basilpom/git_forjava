@@ -94,7 +94,7 @@ public class Student extends JPanel{
 		String colName[]={"학번","이름","학과","주소"};	//표에 출력할 COLUMN NAME
 		model=new DefaultTableModel(colName,0);	//표에 들어갈 데이터
 		table = new JTable(model);				//테이블에 모델(데이터) 바인딩
-		table.setPreferredScrollableViewportSize(new Dimension(255,260));
+		table.setPreferredScrollableViewportSize(new Dimension(255,255));
 		add(new JScrollPane(table));
 		table.addMouseListener(new MouseListener() {
 

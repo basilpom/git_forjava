@@ -19,7 +19,6 @@ public class RentReturn extends JPanel{
 		//도서 대출 패널
 		JPanel rentPanel = new JPanel();
 		this.add(rentPanel);
-		rentPanel.setBackground(Color.gray);
 		rentPanel.setLayout(new FlowLayout());
 		
 		ImageIcon rentImg = new ImageIcon("img/rentBook.png");
@@ -63,7 +62,7 @@ public class RentReturn extends JPanel{
 		String bookColName[] = {"책번호", "도서명", "저자"};	
 		bookModel = new DefaultTableModel(bookColName,0);
 		bookTable = new JTable(bookModel);
-		bookTable.setPreferredScrollableViewportSize(new Dimension(255,100));
+		bookTable.setPreferredScrollableViewportSize(new Dimension(255,85));
 		rentPanel.add(new JScrollPane(bookTable));
 		bookTable.addMouseListener(new MouseListener() {
  
@@ -99,7 +98,7 @@ public class RentReturn extends JPanel{
 		String rentStudentColName[] = {"학번", "이름", "학과"};	
 		DefaultTableModel rentStudentModel = new DefaultTableModel(rentStudentColName,0);
 		JTable rentStudentTable = new JTable(rentStudentModel);
-		rentStudentTable.setPreferredScrollableViewportSize(new Dimension(255,100));
+		rentStudentTable.setPreferredScrollableViewportSize(new Dimension(255,85));
 		rentPanel.add(new JScrollPane(rentStudentTable));
 		rentStudentTable.addMouseListener(new MouseListener() {
 
@@ -128,7 +127,6 @@ public class RentReturn extends JPanel{
 		//도서 반납 패널
 		JPanel returnPanel = new JPanel();
 		this.add(returnPanel);
-		returnPanel.setBackground(Color.GRAY);
 		
 		ImageIcon returnImg = new ImageIcon("img/returnBook.png");
 		JLabel returnLabel = new JLabel("도서반납", returnImg, SwingConstants.CENTER);
@@ -146,7 +144,7 @@ public class RentReturn extends JPanel{
 		String returnStudentColName[] = {"학번", "이름", "학과", "도서명"};	
 		DefaultTableModel returnStudentModel = new DefaultTableModel(returnStudentColName,0);
 		JTable returnStudentTable = new JTable(returnStudentModel);
-		returnStudentTable.setPreferredScrollableViewportSize(new Dimension(255,285));
+		returnStudentTable.setPreferredScrollableViewportSize(new Dimension(255,255));
 		returnPanel.add(new JScrollPane(returnStudentTable));
 		returnStudentTable.addMouseListener(new MouseListener() {
 

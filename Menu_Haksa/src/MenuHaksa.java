@@ -1,3 +1,4 @@
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -18,31 +19,9 @@ public class MenuHaksa extends JFrame{
 	Connection conn = null;
 	
 	public MenuHaksa()
-	{
-
-		/*
-		//DB Connection
-		try
-		{
-			
-			//Oracle에 연결
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:myoracle","ora_user","hong");
-			
-			//MySQL에 연결
-			//Class.forName("com.mysql.jdbc.Driver");
-			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sampledb?useSSL=false", "hkd", "1234");
-			
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		*/	
-				
+	{	
 		this.setTitle("학사관리");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		
 		//MENU
 		JMenuBar mb = new JMenuBar();
@@ -60,8 +39,6 @@ public class MenuHaksa extends JFrame{
 				panel.repaint();			// 다시 그리기
 				panel.add(new Student());	// 화면 생성!!!!!!!!
 				panel.setLayout(null);
-				
-				
 			}});
 		
 		student.add(sItem1);	// 1. 메뉴에 메뉴아이템 부착
@@ -120,7 +97,7 @@ public class MenuHaksa extends JFrame{
 		
 		
 		this.setJMenuBar(mb);		// 3. 프레임에 메뉴바 부착
-		
+		mb.setEnabled(false);
 		panel = new JPanel();
 		this.add(panel);	//이 패널 위에 학사/도서 패널 올리기
 		
@@ -163,12 +140,15 @@ public class MenuHaksa extends JFrame{
 		});
 		*/
 		
-		
-		ImageIcon catIcon = new ImageIcon("img/cat.png");
+		//Welcome Page
+		JLabel welcomeText = new JLabel("학사/도서 관리\n프로그램");
+		welcomeText.setFont(new Font("맑은 고딕", Font.BOLD, 40));
+		panel.add(welcomeText);
+		ImageIcon catIcon = new ImageIcon("img/newcat.png");
 		JLabel welcome = new JLabel(catIcon);
-		this.add(welcome);
+		panel.add(welcome);
 		
-		this.setSize(600, 600);
+		this.setSize(600, 500);
 		this.setVisible(true);
 	}
 	
