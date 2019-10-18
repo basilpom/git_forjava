@@ -8,6 +8,7 @@ import java.sql.*;
 public class RentReturn extends JPanel{
 	Connection conn = null;
 	DefaultTableModel bookModel = null;
+	DefaultTableModel rentStudentModel = null;
 	JTable bookTable = null;
 	
 	public RentReturn()
@@ -65,7 +66,6 @@ public class RentReturn extends JPanel{
 		bookTable.setPreferredScrollableViewportSize(new Dimension(255,85));
 		rentPanel.add(new JScrollPane(bookTable));
 		bookTable.addMouseListener(new MouseListener() {
- 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				bookTable = (JTable)e.getComponent();
@@ -73,7 +73,6 @@ public class RentReturn extends JPanel{
 				
 				String title = (String)bookModel.getValueAt(bookTable.getSelectedRow(), 1);
 				tfBookSearch.setText(title);
-				
 			}
 
 			@Override
@@ -93,7 +92,33 @@ public class RentReturn extends JPanel{
 		rentPanel.add(tfRentStudentSearch);
 		JButton btnRentStudentSearch = new JButton("검색");
 		rentPanel.add(btnRentStudentSearch);
-		// btn listener 붙이기
+		btnRentStudentSearch.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Statement stmt = null;
+				ResultSet rs = null;
+				try
+				{
+					stmt = conn.createStatement();
+					rs = stmt.executeQuery("SELECT * FROM BOOKS WHERE TITLE LIKE '%"+tfRentStudentSearch.getText()+"%'");
+					rentStudentModel.setNumRows(0);
+					while(rs.next())
+					{
+						String[] row = new String[3];
+						row[0] = rs.getString("ID");
+						row[1] = rs.getString("NAME");
+						row[2] = rs.getString("DEPT");
+						rentStudentModel.addRow(row);
+					}
+					rs.close();					
+				}
+				catch(Exception e1)
+				{
+					e1.printStackTrace();
+				}
+				
+			}});
 		
 		String rentStudentColName[] = {"학번", "이름", "학과"};	
 		DefaultTableModel rentStudentModel = new DefaultTableModel(rentStudentColName,0);
