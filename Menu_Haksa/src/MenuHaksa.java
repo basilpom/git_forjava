@@ -97,20 +97,25 @@ public class MenuHaksa extends JFrame{
 		panel = new JPanel();
 		this.add(panel);	//이 패널 위에 학사/도서 패널 올리기
 		//로그인 전 : 모든 메뉴 아이템 비활성화
+		/*
 		sItem1.setEnabled(false);
 		bItemRentAndReturn.setEnabled(false);
 		bItemInfo.setEnabled(false);
 		bItemChart.setEnabled(false);
+		*/
 		//Welcome Page
-		JLabel welcomeText = new JLabel("    학사/도서 관리\n프로그램    ");
+		JLabel welcomeText = new JLabel("    학사/도서 관리 프로그램    ");
 		welcomeText.setFont(new Font("맑은 고딕", Font.BOLD, 40));
 		panel.add(welcomeText);
 		JButton btnStart = new JButton("시작하기");
 		panel.add(btnStart);
+		//Login Dialog 
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Login Dialog 
+				//Login 성공 시 menu item 활성화
+				
+				
 			}});
 		ImageIcon catIcon = new ImageIcon("img/newcat.png");
 		JLabel welcome = new JLabel(catIcon);

@@ -1,15 +1,33 @@
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Calendar;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
 
 public class RentReturn extends JPanel{
 	Connection conn = null;
 	DefaultTableModel bookModel = null;
 	DefaultTableModel rentStudentModel = null;
 	JTable bookTable = null;
+	JTable rentStudentTable = null;
 	
 	public RentReturn()
 	{
@@ -65,6 +83,7 @@ public class RentReturn extends JPanel{
 		bookTable = new JTable(bookModel);
 		bookTable.setPreferredScrollableViewportSize(new Dimension(255,85));
 		rentPanel.add(new JScrollPane(bookTable));
+		//도서 검색 테이블에서 선택시 textfield에 반영
 		bookTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -101,7 +120,7 @@ public class RentReturn extends JPanel{
 				try
 				{
 					stmt = conn.createStatement();
-					rs = stmt.executeQuery("SELECT * FROM BOOKS WHERE TITLE LIKE '%"+tfRentStudentSearch.getText()+"%'");
+					rs = stmt.executeQuery("SELECT * FROM STUDENT WHERE ID LIKE '%"+tfRentStudentSearch.getText()+"%'");
 					rentStudentModel.setNumRows(0);
 					while(rs.next())
 					{
@@ -121,15 +140,19 @@ public class RentReturn extends JPanel{
 			}});
 		
 		String rentStudentColName[] = {"학번", "이름", "학과"};	
-		DefaultTableModel rentStudentModel = new DefaultTableModel(rentStudentColName,0);
-		JTable rentStudentTable = new JTable(rentStudentModel);
+		rentStudentModel = new DefaultTableModel(rentStudentColName,0);
+		rentStudentTable = new JTable(rentStudentModel);
 		rentStudentTable.setPreferredScrollableViewportSize(new Dimension(255,85));
 		rentPanel.add(new JScrollPane(rentStudentTable));
+		//학번 검색 테이블에서 선택시 textfield에 반영
 		rentStudentTable.addMouseListener(new MouseListener() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//여기다가 웅앵웅앵
+				rentStudentTable = (JTable)e.getComponent();
+				rentStudentModel = (DefaultTableModel)rentStudentTable.getModel();
+				
+				String id = (String)rentStudentModel.getValueAt(rentStudentTable.getSelectedRow(), 0);
+				tfRentStudentSearch.setText(id);
 			}
 
 			@Override
@@ -144,8 +167,68 @@ public class RentReturn extends JPanel{
 		
 		JButton rentButton = new JButton("대출");
 		rentPanel.add(rentButton);
+		//등록 버튼 누르면 DB에 반영
+		rentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Statement stmt = null;
+				ResultSet rs = null;
+				//등록 시 모든 정보를 입력하지 않으면 메세지 창 띄우기
+				if(tfBookSearch.getText().equals("")) 
+					
+				{
+					JOptionPane.showMessageDialog(
+							null,"모든 정보를 입력하세요!","알림",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else if(tfRentStudentSearch.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(
+							null,"모든 정보를 입력하세요!","알림",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					try 
+					{
+						stmt = conn.createStatement();
+						//INSERT
+						//int rowcnt = stmt.executeUpdate("INSERT INTO VALUES");
+						Calendar now = Calendar.getInstance();
+						System.out.println();
+						JOptionPane.showMessageDialog(null, "대출되었습니다.");					
+					}
+					
+					catch(Exception e1) 
+					{
+						e1.printStackTrace();
+					}
+					finally 
+					{ 
+						try 
+						{
+							if(stmt != null) {stmt.close();}
+							if(rs!=null) {rs.close();}
+						}
+						catch(Exception e2) 
+						{
+							e2.printStackTrace();
+						}
+					}
+				}
+				
+			}});
 		JButton rentCancelButton = new JButton("취소");
 		rentPanel.add(rentCancelButton);
+		//취소 버튼 누르면 도서명, 학번 textfield 값 지우기
+		rentCancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tfBookSearch.setText(null);
+				tfRentStudentSearch.setText(null);
+				
+			}});
+		
 		rentPanel.setSize(280, 600);
 		rentPanel.setPreferredSize(new Dimension(280,600));
 
