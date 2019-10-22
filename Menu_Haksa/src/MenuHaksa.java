@@ -27,7 +27,7 @@ class LoginDialog extends JDialog
 	private JPasswordField pfPW = new JPasswordField(10);
 	private JButton loginBtn = new JButton("로그인");
 	private JButton cancelBtn = new JButton("취소");
-	
+	public boolean flag = false;
 	public LoginDialog(JFrame frame, String title)
 	{
 		super(frame, title, true);
@@ -57,6 +57,7 @@ class LoginDialog extends JDialog
 				DBManager db = new DBManager();
 				conn = db.getConnection();
 				
+				
 				String query = "SELECT ADM_PW "
 							 + " FROM ADMINISTRATOR "
 							 + " WHERE ADM_ID = '"+tfID.getText()+"'";
@@ -66,19 +67,30 @@ class LoginDialog extends JDialog
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery(query);
 					System.out.println(query);
+					System.out.println(rs.next());
+
+					password = rs.getString("ADM_PW");
+
+					/*
 					while(rs.next())
 					{
 						password = rs.getString("ADM_PW");
-						System.out.println(password);
+						System.out.println("password : " + password);
+						System.out.println(rs.getString("ADM_PW"));
 					}
-					
-					if(password == String.valueOf(pfPW.getPassword()))
+					*/
+					//DB내 로그인 정보와 입력한 로그인 정보 비교
+					if(password.equals(String.valueOf(pfPW.getPassword())))
 					{
 						//로그인성공!
+						System.out.println("Login Success!");
+						flag = true;
+						
 					}
 					else
 					{
 						//ID, PW를 확인하세요!
+						System.out.println("Login Failed!");
 					}
 				}
 				catch(Exception e1)
@@ -183,8 +195,8 @@ public class MenuHaksa extends JFrame{
 		panel = new JPanel();
 		this.add(panel);	//이 패널 위에 학사/도서 패널 올리기
 		//로그인 전 : 모든 메뉴 아이템 비활성화
-		/*
-		sItem1.setEnabled(false);
+		
+		sItem1.setEnabled(false);/*
 		bItemRentAndReturn.setEnabled(false);
 		bItemInfo.setEnabled(false);
 		bItemChart.setEnabled(false);
@@ -202,7 +214,7 @@ public class MenuHaksa extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				//Login 성공 시 menu item 활성화
 				dialog.setVisible(true);
-				
+				sItem1.setEnabled(true);
 			}});
 		ImageIcon catIcon = new ImageIcon("img/newcat.png");
 		JLabel welcome = new JLabel(catIcon);
