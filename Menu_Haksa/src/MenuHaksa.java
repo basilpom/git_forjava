@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.ImageIcon;
@@ -15,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -27,7 +29,7 @@ class LoginDialog extends JDialog
 	private JPasswordField pfPW = new JPasswordField(10);
 	private JButton loginBtn = new JButton("로그인");
 	private JButton cancelBtn = new JButton("취소");
-	public boolean flag = false;
+	//public static boolean flag = false;
 	public LoginDialog(JFrame frame, String title)
 	{
 		super(frame, title, true);
@@ -43,8 +45,6 @@ class LoginDialog extends JDialog
 		add(new JLabel("비밀번호 : "));
 		add(pfPW);
 		
-		
-		
 		loginBtn.addActionListener(new ActionListener() {
 			Connection conn = null;
 			Statement stmt = null;
@@ -57,7 +57,6 @@ class LoginDialog extends JDialog
 				DBManager db = new DBManager();
 				conn = db.getConnection();
 				
-				
 				String query = "SELECT ADM_PW "
 							 + " FROM ADMINISTRATOR "
 							 + " WHERE ADM_ID = '"+tfID.getText()+"'";
@@ -67,40 +66,47 @@ class LoginDialog extends JDialog
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery(query);
 					System.out.println(query);
-					System.out.println(rs.next());
-
-					password = rs.getString("ADM_PW");
-
-					/*
 					while(rs.next())
 					{
 						password = rs.getString("ADM_PW");
-						System.out.println("password : " + password);
-						System.out.println(rs.getString("ADM_PW"));
 					}
-					*/
 					//DB내 로그인 정보와 입력한 로그인 정보 비교
 					if(password.equals(String.valueOf(pfPW.getPassword())))
 					{
 						//로그인성공!
 						System.out.println("Login Success!");
-						flag = true;
-						
+						MenuHaksa.flag = true;
+						setVisible(false);
+						JOptionPane.showMessageDialog(
+								null,"로그인 되었습니다!","알림",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
 					else
 					{
 						//ID, PW를 확인하세요!
-						System.out.println("Login Failed!");
+						JOptionPane.showMessageDialog(
+								null,"아이디, 비밀번호를 확인하세요!","알림",
+								JOptionPane.ERROR_MESSAGE);
 					}
+				}
+				catch(NullPointerException e_sql)
+				{
+					//값을 입력하지 않았거나 일치하는 ID가 없을 경우.
+					JOptionPane.showMessageDialog(
+							null,"아이디, 비밀번호를 확인하세요!","알림",
+							JOptionPane.ERROR_MESSAGE);
 				}
 				catch(Exception e1)
 				{
 					e1.printStackTrace();
 				}
+				
 			}});
 		cancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				tfID.setText(null);
+				pfPW.setText(null);
 				setVisible(false);
 			}});
 		
@@ -118,6 +124,7 @@ public class MenuHaksa extends JFrame{
 	Student StudentObject = null;
 	JFrame frame = new JFrame();
 	private LoginDialog dialog;
+	public static boolean flag = false;
 	public MenuHaksa()
 	{	
 		this.setTitle("학사관리");
@@ -184,37 +191,40 @@ public class MenuHaksa extends JFrame{
 				panel.repaint();			// 다시 그리기
 				panel.add(new PieChart());	// 화면 생성!!!!!!!!
 				panel.setLayout(null);
-				//각 과별로 대출... 웅앵...
 			}});
 		book.add(bItemChart);	
 		mb.add(book);
 		
-		
 		this.setJMenuBar(mb);		// 3. 프레임에 메뉴바 부착
-		//MenuItem.Enable() 사용하기! (로그인)
 		panel = new JPanel();
 		this.add(panel);	//이 패널 위에 학사/도서 패널 올리기
-		//로그인 전 : 모든 메뉴 아이템 비활성화
 		
-		sItem1.setEnabled(false);/*
+		//로그인 전 : 모든 메뉴 아이템 비활성화
+		sItem1.setEnabled(false);
 		bItemRentAndReturn.setEnabled(false);
 		bItemInfo.setEnabled(false);
 		bItemChart.setEnabled(false);
-		*/
+		
 		//Welcome Page
 		JLabel welcomeText = new JLabel("    학사/도서 관리 프로그램    ");
 		welcomeText.setFont(new Font("맑은 고딕", Font.BOLD, 40));
 		panel.add(welcomeText);
 		JButton btnStart = new JButton("시작하기");
 		panel.add(btnStart);
-		//Login Dialog 
+		//Press btnStart -> show Login Dialog 
 		dialog = new LoginDialog(this,"관리자로 로그인하기");
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Login 성공 시 menu item 활성화
 				dialog.setVisible(true);
-				sItem1.setEnabled(true);
+				if(flag == true)
+				{
+					sItem1.setEnabled(true);
+					bItemRentAndReturn.setEnabled(true);
+					bItemInfo.setEnabled(true);
+					bItemChart.setEnabled(true);
+				}
 			}});
 		ImageIcon catIcon = new ImageIcon("img/newcat.png");
 		JLabel welcome = new JLabel(catIcon);
@@ -223,8 +233,7 @@ public class MenuHaksa extends JFrame{
 		this.setSize(600, 500);
 		this.setVisible(true);
 	}
-	
-	
+
 	public static void main(String[] args)
 	{
 		new MenuHaksa();

@@ -41,20 +41,18 @@ public class BookRentInfo extends JPanel{
 	    l_dept.setBounds(10, 10, 30, 20);
 	    add(l_dept);
 	   
-	   
 	    String[] dept={"전체","컴퓨터시스템","멀티미디어","컴퓨터공학"};
 	    JComboBox cb_dept=new JComboBox(dept);
 	    cb_dept.setBounds(45, 10, 100, 20);
 	    add(cb_dept);
 	    
 	    cb_dept.addActionListener(new ActionListener() {
-
 	    	//COMBOBOX에서 FILTERING
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox)e.getSource();
 				//COMBOBOX에서 잘 선택 되는지 확인
-				System.out.println(cb.getSelectedIndex());
+				//System.out.println(cb.getSelectedIndex());
 				
 				int si = cb.getSelectedIndex();
 				query = "SELECT BOOKRENT.NO, STUDENT.NAME, BOOKS.TITLE, BOOKRENT.RDATE" + 
@@ -82,10 +80,8 @@ public class BookRentInfo extends JPanel{
 					query += " AND STUDENT.DEPT = '컴퓨터공학' "
 						   + " ORDER BY BOOKRENT.NO";
 				}
-				
 				//검색목록
 				list();
-				
 			}});
 	    
 	    //TABLE
@@ -103,7 +99,6 @@ public class BookRentInfo extends JPanel{
 	    list();	//전체 목록
 	}
 	
-
 	   public void list(){
 	    try
 	    {
@@ -131,6 +126,4 @@ public class BookRentInfo extends JPanel{
 	    	System.out.println(e1.getMessage());
 	    }
 	 }
-	
-
 }

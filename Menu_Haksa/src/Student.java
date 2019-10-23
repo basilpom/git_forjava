@@ -4,7 +4,6 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-
 public class Student extends JPanel{
 	JTextArea taList = null;
 	JTextField tfId = null;
@@ -16,34 +15,18 @@ public class Student extends JPanel{
 	//Connection conn = MenuHaksa.conn;
 	Connection conn = null;
 
-	public Student() {
-		
+	public Student() 
+	{
 		DBManager db = new DBManager();
 		conn = db.getConnection();
-		
-		//DB Connection
-		/*
-		try
-		{
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:myoracle","ora_user","hong");
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		*/
-		
 		setLayout(new FlowLayout());
 
 		add(new JLabel("학번"));
 		tfId = new JTextField(14);
 		add(tfId);
-		
 		//수정을 위한 검색 버튼 추가
 		JButton btnSearch = new JButton("검색");
 		btnSearch.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Statement stmt = null;
@@ -74,7 +57,6 @@ public class Student extends JPanel{
 						}
 				}
 			}});
-		
 		add(btnSearch);
 		
 
@@ -97,12 +79,11 @@ public class Student extends JPanel{
 		table.setPreferredScrollableViewportSize(new Dimension(255,255));
 		add(new JScrollPane(table));
 		table.addMouseListener(new MouseListener() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				table = (JTable)e.getComponent();
 				model = (DefaultTableModel)table.getModel();
-				
+				//table에서 선택한 row의 정보를 textfield에 반영
 				String id = (String)model.getValueAt(table.getSelectedRow(), 0);
 				tfId.setText(id);
 				String name = (String)model.getValueAt(table.getSelectedRow(), 1);
@@ -111,9 +92,7 @@ public class Student extends JPanel{
 				tfMajor.setText(dept);
 				String address = (String)model.getValueAt(table.getSelectedRow(), 3);
 				tfAddress.setText(address);
-				
 			}
-			
 			@Override
 			public void mouseEntered(MouseEvent e) {}
 			@Override
@@ -122,8 +101,6 @@ public class Student extends JPanel{
 			public void mousePressed(MouseEvent e) {}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
-			
-			
 			});
 
 		JButton btnInsert = new JButton("등록");
@@ -165,38 +142,31 @@ public class Student extends JPanel{
 					try 
 					{
 						stmt = conn.createStatement();
-		
 						//INSERT
 						int rowcnt = stmt.executeUpdate("insert into student(id,name,dept,address) values('"+tfId.getText()+"','"+tfName.getText()+"','"+tfMajor.getText()+"','"+tfAddress.getText()+"')");
-	
+						
 						JOptionPane.showMessageDialog(null, "등록되었습니다.");
-	
 						//등록한 정보까지 모두 보여주기!
 						rs = stmt.executeQuery("select * from student");
 						showList(rs);
-						
 					}
-					
 					catch(Exception e1) 
 					{
 						e1.printStackTrace();
 					}
 					finally 
 					{ 
-							try 
-							{
-								if(stmt != null) {stmt.close();}
-								if(rs!=null) {rs.close();}
-							}
-							catch(Exception e2) 
-							{
-								e2.printStackTrace();
-							}
+						try 
+						{
+							if(stmt != null) {stmt.close();}
+							if(rs!=null) {rs.close();}
 						}
+						catch(Exception e2) 
+						{
+							e2.printStackTrace();
+						}
+					}
 				}
-				
-
-				
 			}});
 
 		JButton btnList = new JButton("목록");
@@ -209,14 +179,11 @@ public class Student extends JPanel{
 				{
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery("select * from student");
-
 					showList(rs);
-
 				}
 				catch(Exception e1) 
 				{
 					e1.printStackTrace();
-
 				}
 				finally 
 				{
@@ -230,7 +197,6 @@ public class Student extends JPanel{
 							e2.printStackTrace();
 						}
 					}
-
 			}});
 
 		add(btnList);
@@ -238,7 +204,6 @@ public class Student extends JPanel{
 		btnUpdate.addActionListener(new ActionListener() {
 			Statement stmt = null;
 			ResultSet rs = null;
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
@@ -250,24 +215,22 @@ public class Student extends JPanel{
 					//수정 버튼을 누르면 바로 바뀐 정보가 뜨도록
 					rs = stmt.executeQuery("select * from student");
 					showList(rs);
-					
 				}
-				
 				catch(Exception e1) 
 				{
 					e1.printStackTrace();
 				}
 				finally 
 				{
-						try 
-						{
-							if(stmt != null) {stmt.close();}
-							if(rs!=null) {rs.close();}
-						}
-						catch(Exception e2) 
-						{
-							e2.printStackTrace();
-						}
+					try 
+					{
+						if(stmt != null) {stmt.close();}
+						if(rs!=null) {rs.close();}
+					}
+					catch(Exception e2) 
+					{
+						e2.printStackTrace();
+					}
 				}
 				
 			}
@@ -315,11 +278,11 @@ public class Student extends JPanel{
 								e2.printStackTrace();
 							}
 					}
-
+					tfId.setText(null);
+					tfName.setText(null);
+					tfMajor.setText(null);
+					tfAddress.setText(null);
 					JOptionPane.showMessageDialog(null, "삭제되었습니다.","알림",JOptionPane.ERROR_MESSAGE);
-					
-					//초기화하는 메소드 따로 만들어서 해보삼^^...
-
 				}
 			}
 		});
@@ -329,7 +292,6 @@ public class Student extends JPanel{
 
 	}
 	
-	
 	//EXAMPLE 01. 전체 목록을 출력하는 메소드
 	public void showList(ResultSet rs)
 	{
@@ -337,7 +299,6 @@ public class Student extends JPanel{
 	    {		    
 		    //JTable 초기화
 		    model.setNumRows(0);
-		    
 		    while(rs.next())
 		    {
 		    	String[] row=new String[4];		//컬럼의 갯수가 4
@@ -348,15 +309,10 @@ public class Student extends JPanel{
 			    model.addRow(row);
 		     }
 		     rs.close();
-		    
 	    }
 	    catch(Exception e1)
 	    {
 	    	System.out.println(e1.getMessage());
 	    }
-		
 	}
-	
-
-
 }
