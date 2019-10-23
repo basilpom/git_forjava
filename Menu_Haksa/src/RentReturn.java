@@ -26,6 +26,7 @@ public class RentReturn extends JPanel{
 	Connection conn = null;
 	DefaultTableModel bookModel = null;
 	DefaultTableModel rentStudentModel = null;
+	DefaultTableModel returnStudentModel = null;
 	JTable bookTable = null;
 	JTable rentStudentTable = null;
 	
@@ -92,6 +93,7 @@ public class RentReturn extends JPanel{
 				
 				String title = (String)bookModel.getValueAt(bookTable.getSelectedRow(), 1);
 				tfBookSearch.setText(title);
+				System.out.println(bookModel.getValueAt(bookTable.getSelectedRow(), 0));
 			}
 
 			@Override
@@ -136,7 +138,6 @@ public class RentReturn extends JPanel{
 				{
 					e1.printStackTrace();
 				}
-				
 			}});
 		
 		String rentStudentColName[] = {"학번", "이름", "학과"};	
@@ -193,10 +194,15 @@ public class RentReturn extends JPanel{
 					{
 						stmt = conn.createStatement();
 						//INSERT
+						stmt.executeUpdate("INSERT INTO BOOKRENT "
+										 + " VALUES(CONCAT(TO_CHAR(SYSDATE, 'YYYYMMDD'), "
+										 + "LPAD(SEQ_RENT_NO.NEXTVAL, 2, 0)), "
+										 + "'"+tfRentStudentSearch.getText()+"', "
+										 + "'"+(String)bookModel.getValueAt(bookTable.getSelectedRow(), 0)+"', "
+										 + "TO_CHAR(SYSDATE, 'YYYYMMDD'))");
 						//int rowcnt = stmt.executeUpdate("INSERT INTO VALUES");
-						Calendar now = Calendar.getInstance();
-						System.out.println();
-						JOptionPane.showMessageDialog(null, "대출되었습니다.");					
+						//(String)bookModel.getValueAt(bookTable.getSelectedRow(), 0);
+						JOptionPane.showMessageDialog(null, "대출되었습니다.");
 					}
 					
 					catch(Exception e1) 
@@ -242,25 +248,52 @@ public class RentReturn extends JPanel{
 		returnPanel.add(returnLabel);
 		
 		returnPanel.add(new JLabel("학번"));
-		JTextField tfStudentSearch = new JTextField(12);
-		returnPanel.add(tfStudentSearch);
-		JButton btnStudentSearch = new JButton("검색");
-		returnPanel.add(btnStudentSearch);
+		JTextField tfReturnStudentSearch = new JTextField(12);
+		returnPanel.add(tfReturnStudentSearch);
+		JButton btnReturnStudentSearch = new JButton("검색");
+		returnPanel.add(btnReturnStudentSearch);
 		// btn listener 붙이기
+		btnReturnStudentSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Statement stmt = null;
+				ResultSet rs = null;
+				try
+				{
+					stmt = conn.createStatement();
+					rs = stmt.executeQuery("SELECT STUDENT.ID, STUDENT.NAME, STUDENT.DEPT, BOOKS.TITLE "
+										 + " FROM STUDENT, BOOKRENT, BOOKS "
+										 + " WHERE STUDENT.ID = BOOKRENT.ID "
+										 + " AND BOOKS.NO = BOOKRENT.BOOKNO");
+					returnStudentModel.setNumRows(0);
+					while(rs.next())
+					{
+						String[] row = new String[4];
+						row[0] = rs.getString("ID");
+						row[1] = rs.getString("NAME");
+						row[2] = rs.getString("DEPT");
+						row[3] = rs.getString("TITLE");
+						returnStudentModel.addRow(row);
+					}
+					rs.close();					
+				}
+				catch(Exception e1)
+				{
+					e1.printStackTrace();
+				}
+				
+			}});
 		
-		//학생검색
 		String returnStudentColName[] = {"학번", "이름", "학과", "도서명"};	
-		DefaultTableModel returnStudentModel = new DefaultTableModel(returnStudentColName,0);
+		returnStudentModel = new DefaultTableModel(returnStudentColName,0);
 		JTable returnStudentTable = new JTable(returnStudentModel);
 		returnStudentTable.setPreferredScrollableViewportSize(new Dimension(255,255));
 		returnPanel.add(new JScrollPane(returnStudentTable));
 		returnStudentTable.addMouseListener(new MouseListener() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//여기다가 웅앵웅앵
+				tfReturnStudentSearch.setText((String)returnStudentModel.getValueAt(returnStudentTable.getSelectedRow(), 0));
 			}
-
 			@Override
 			public void mouseEntered(MouseEvent e) {}
 			@Override
@@ -271,10 +304,49 @@ public class RentReturn extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			});
 		
-		JButton returnButton = new JButton("반납");
-		returnPanel.add(returnButton);
-		JButton returnCancelButton = new JButton("취소");
-		returnPanel.add(returnCancelButton);
+		JButton btnReturn = new JButton("반납");
+		returnPanel.add(btnReturn);
+		btnReturn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Statement stmt = null;
+				ResultSet rs = null;
+				try
+				{
+					stmt = conn.createStatement();
+					stmt.executeQuery("DELETE FROM BOOKRENT "
+										 + " WHERE ID = '"+tfReturnStudentSearch.getText()+"' "
+										 + " AND BOOKNO = (SELECT NO FROM BOOKS WHERE TITLE= '"
+										 +(String)returnStudentModel.getValueAt(returnStudentTable.getSelectedRow(), 3)+"')");
+					rs = stmt.executeQuery("SELECT STUDENT.ID, STUDENT.NAME, STUDENT.DEPT, BOOKS.TITLE "
+							 + " FROM STUDENT, BOOKRENT, BOOKS "
+							 + " WHERE STUDENT.ID = BOOKRENT.ID "
+							 + " AND BOOKS.NO = BOOKRENT.BOOKNO");
+					returnStudentModel.setNumRows(0);
+					while(rs.next())
+					{
+						String[] row = new String[4];
+						row[0] = rs.getString("ID");
+						row[1] = rs.getString("NAME");
+						row[2] = rs.getString("DEPT");
+						row[3] = rs.getString("TITLE");
+						returnStudentModel.addRow(row);
+					}
+					rs.close();					
+				}
+				catch(Exception e1)
+				{
+					e1.printStackTrace();
+				}
+				
+			}});
+		JButton btnReturnCancel = new JButton("취소");
+		returnPanel.add(btnReturnCancel);
+		btnReturnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tfReturnStudentSearch.setText(null);				
+			}});
 		
 		returnPanel.setSize(280, 600);
 		returnPanel.setPreferredSize(new Dimension(280,600));
