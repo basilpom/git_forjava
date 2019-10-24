@@ -93,7 +93,6 @@ public class RentReturn extends JPanel{
 				
 				String title = (String)bookModel.getValueAt(bookTable.getSelectedRow(), 1);
 				tfBookSearch.setText(title);
-				System.out.println(bookModel.getValueAt(bookTable.getSelectedRow(), 0));
 			}
 
 			@Override
@@ -264,7 +263,8 @@ public class RentReturn extends JPanel{
 					rs = stmt.executeQuery("SELECT STUDENT.ID, STUDENT.NAME, STUDENT.DEPT, BOOKS.TITLE "
 										 + " FROM STUDENT, BOOKRENT, BOOKS "
 										 + " WHERE STUDENT.ID = BOOKRENT.ID "
-										 + " AND BOOKS.NO = BOOKRENT.BOOKNO");
+										 + " AND BOOKS.NO = BOOKRENT.BOOKNO "
+										 + " AND STUDENT.ID LIKE '%"+tfReturnStudentSearch.getText()+"%'");
 					returnStudentModel.setNumRows(0);
 					while(rs.next())
 					{
@@ -338,7 +338,7 @@ public class RentReturn extends JPanel{
 				{
 					e1.printStackTrace();
 				}
-				
+				tfReturnStudentSearch.setText(null);
 			}});
 		JButton btnReturnCancel = new JButton("√Îº“");
 		returnPanel.add(btnReturnCancel);

@@ -51,9 +51,6 @@ public class BookRentInfo extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox)e.getSource();
-				//COMBOBOX에서 잘 선택 되는지 확인
-				//System.out.println(cb.getSelectedIndex());
-				
 				int si = cb.getSelectedIndex();
 				query = "SELECT BOOKRENT.NO, STUDENT.NAME, BOOKS.TITLE, BOOKRENT.RDATE" + 
 						"  FROM STUDENT, BOOKS, BOOKRENT" + 
@@ -123,7 +120,7 @@ public class BookRentInfo extends JPanel{
 	    }
 	    catch(Exception e1)
 	    {
-	    	System.out.println(e1.getMessage());
+	    	e1.printStackTrace();
 	    }
 	 }
 }

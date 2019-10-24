@@ -65,7 +65,6 @@ class LoginDialog extends JDialog
 				{
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery(query);
-					System.out.println(query);
 					while(rs.next())
 					{
 						password = rs.getString("ADM_PW");
@@ -74,7 +73,6 @@ class LoginDialog extends JDialog
 					if(password.equals(String.valueOf(pfPW.getPassword())))
 					{
 						//로그인성공!
-						System.out.println("Login Success!");
 						MenuHaksa.flag = true;
 						setVisible(false);
 						JOptionPane.showMessageDialog(
@@ -171,7 +169,6 @@ public class MenuHaksa extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println("대출정보");
 				panel.removeAll();			// 모든 컴포넌트 삭제
 				panel.revalidate();			// 다시 활성화
 				panel.repaint();			// 다시 그리기
@@ -185,7 +182,6 @@ public class MenuHaksa extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("대출현황");
 				panel.removeAll();			// 모든 컴포넌트 삭제
 				panel.revalidate();			// 다시 활성화
 				panel.repaint();			// 다시 그리기
@@ -224,6 +220,7 @@ public class MenuHaksa extends JFrame{
 					bItemRentAndReturn.setEnabled(true);
 					bItemInfo.setEnabled(true);
 					bItemChart.setEnabled(true);
+					btnStart.setEnabled(false);
 				}
 			}});
 		ImageIcon catIcon = new ImageIcon("img/newcat.png");

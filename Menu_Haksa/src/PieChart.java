@@ -20,16 +20,13 @@ public class PieChart extends JPanel {
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
 
-
 		add(titleLabel, BorderLayout.NORTH);
 		add(chartPanel, BorderLayout.CENTER);
 
 		this.setSize(500, 500);
 		this.setVisible(true);
-		
 	}
-	
-	
+
 	class ChartPanel extends JPanel
 	{
 		public void paintComponent(Graphics g)
@@ -59,25 +56,18 @@ public class PieChart extends JPanel {
 					String[] row=new String[2];//컬럼의 갯수가 4
 				    row[0]=rs.getString("DEPT");
 				    row[1]=rs.getString("COUNT");
-				    System.out.println(row[0]+row[1]);
-				    
+				    //System.out.println(row[0]+row[1]);
 				    // table에서 select 한 값들을 string, int 배열에 저장
 				    dept[i] = row[0];
 				    bookCount[i] = Integer.parseInt(row[1]);
 				    i++;
-				    
 				}
 				rs.close();
-
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
-
-			//color array로 하고싶은데...
-			//Color[] chartColor = {new Color(100,20,30), new Color(10,200,30), new Color(10,20,300)};
-			
 
 			super.paintComponent(g);
 			try 
@@ -98,12 +88,8 @@ public class PieChart extends JPanel {
 					angleSum += 360*bookCount[i]/sum + 1;	//int 값 angle로 인한 오차 보정(+1)
 					g.fillRect(360, 130+20*i, 12, 12);
 				}
-				
 			}
 			catch(Exception e) {}
-			
 		}
 	}
-	
-
 }

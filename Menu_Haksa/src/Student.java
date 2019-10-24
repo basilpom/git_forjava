@@ -312,7 +312,7 @@ public class Student extends JPanel{
 	    }
 	    catch(Exception e1)
 	    {
-	    	System.out.println(e1.getMessage());
+	    	e1.printStackTrace();
 	    }
 	}
 }
