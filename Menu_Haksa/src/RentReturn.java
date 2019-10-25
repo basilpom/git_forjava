@@ -59,7 +59,8 @@ public class RentReturn extends JPanel{
 				try
 				{
 					stmt = conn.createStatement();
-					rs = stmt.executeQuery("SELECT * FROM BOOKS WHERE TITLE LIKE '%"+tfBookSearch.getText()+"%'");
+					rs = stmt.executeQuery("SELECT * FROM BOOKS "
+										 + " WHERE UPPER(TITLE) LIKE '%'||UPPER('"+tfBookSearch.getText()+"')||'%'");
 					bookModel.setNumRows(0);
 					while(rs.next())
 					{
@@ -264,7 +265,8 @@ public class RentReturn extends JPanel{
 										 + " FROM STUDENT, BOOKRENT, BOOKS "
 										 + " WHERE STUDENT.ID = BOOKRENT.ID "
 										 + " AND BOOKS.NO = BOOKRENT.BOOKNO "
-										 + " AND STUDENT.ID LIKE '%"+tfReturnStudentSearch.getText()+"%'");
+										 + " AND STUDENT.ID LIKE '%"+tfReturnStudentSearch.getText()+"%' "
+										 + " ORDER BY BOOKRENT.NO ");
 					returnStudentModel.setNumRows(0);
 					while(rs.next())
 					{

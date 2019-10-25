@@ -29,7 +29,8 @@ public class BookRentInfo extends JPanel{
 		query = "SELECT BOOKRENT.NO, STUDENT.NAME, BOOKS.TITLE, BOOKRENT.RDATE" + 
 				"  FROM STUDENT, BOOKS, BOOKRENT" + 
 				" WHERE STUDENT.ID = BOOKRENT.ID" + 
-				"   AND BOOKS.NO = BOOKRENT.BOOKNO";
+				"   AND BOOKS.NO = BOOKRENT.BOOKNO" +
+				" ORDER BY BOOKRENT.NO";
 		
 		DBManager db = new DBManager();
 		conn = db.getConnection();
