@@ -209,6 +209,7 @@ public class MenuHaksa extends JFrame{
 		panel.add(btnStart);
 		//Press btnStart -> show Login Dialog 
 		dialog = new LoginDialog(this,"관리자로 로그인하기");
+		dialog.setLocationRelativeTo(null);	//dialog location
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
