@@ -125,7 +125,7 @@ public class MenuHaksa extends JFrame{
 	public static boolean flag = false;
 	public MenuHaksa()
 	{	
-		this.setTitle("학사관리");
+		this.setTitle("학사 & 도서 관리 프로그램");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//MENU

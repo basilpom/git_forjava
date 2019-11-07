@@ -190,37 +190,44 @@ public class RentReturn extends JPanel{
 				}
 				else
 				{
-					try 
+					if(JOptionPane.showConfirmDialog(null, 
+							"대출하시겠습니까?","대출",
+							JOptionPane.YES_NO_OPTION)
+							==JOptionPane.YES_OPTION)
 					{
-						stmt = conn.createStatement();
-						//INSERT
-						stmt.executeUpdate("INSERT INTO BOOKRENT "
-										 + " VALUES(CONCAT(TO_CHAR(SYSDATE, 'YYYYMMDD'), "
-										 + "LPAD(SEQ_RENT_NO.NEXTVAL, 2, 0)), "
-										 + "'"+tfRentStudentSearch.getText()+"', "
-										 + "'"+(String)bookModel.getValueAt(bookTable.getSelectedRow(), 0)+"', "
-										 + "TO_CHAR(SYSDATE, 'YYYYMMDD'))");
-						//int rowcnt = stmt.executeUpdate("INSERT INTO VALUES");
-						//(String)bookModel.getValueAt(bookTable.getSelectedRow(), 0);
-						JOptionPane.showMessageDialog(null, "대출되었습니다.");
-					}
-					
-					catch(Exception e1) 
-					{
-						e1.printStackTrace();
-					}
-					finally 
-					{ 
 						try 
 						{
-							if(stmt != null) {stmt.close();}
-							if(rs!=null) {rs.close();}
+							stmt = conn.createStatement();
+							//INSERT
+							stmt.executeUpdate("INSERT INTO BOOKRENT "
+											 + " VALUES(CONCAT(TO_CHAR(SYSDATE, 'YYYYMMDD'), "
+											 + "LPAD(SEQ_RENT_NO.NEXTVAL, 2, 0)), "
+											 + "'"+tfRentStudentSearch.getText()+"', "
+											 + "'"+(String)bookModel.getValueAt(bookTable.getSelectedRow(), 0)+"', "
+											 + "TO_CHAR(SYSDATE, 'YYYYMMDD'))");
+							//int rowcnt = stmt.executeUpdate("INSERT INTO VALUES");
+							//(String)bookModel.getValueAt(bookTable.getSelectedRow(), 0);
+							JOptionPane.showMessageDialog(null, "대출되었습니다.");
 						}
-						catch(Exception e2) 
+						
+						catch(Exception e1) 
 						{
-							e2.printStackTrace();
+							e1.printStackTrace();
+						}
+						finally 
+						{ 
+							try 
+							{
+								if(stmt != null) {stmt.close();}
+								if(rs!=null) {rs.close();}
+							}
+							catch(Exception e2) 
+							{
+								e2.printStackTrace();
+							}
 						}
 					}
+					
 				}
 				
 			}});
@@ -311,36 +318,43 @@ public class RentReturn extends JPanel{
 		btnReturn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Statement stmt = null;
-				ResultSet rs = null;
-				try
+				if(JOptionPane.showConfirmDialog(null, 
+						"반납하시겠습니까?","반납",
+						JOptionPane.YES_NO_OPTION)
+						==JOptionPane.YES_OPTION)
 				{
-					stmt = conn.createStatement();
-					stmt.executeQuery("DELETE FROM BOOKRENT "
-										 + " WHERE ID = '"+tfReturnStudentSearch.getText()+"' "
-										 + " AND BOOKNO = (SELECT NO FROM BOOKS WHERE TITLE= '"
-										 +(String)returnStudentModel.getValueAt(returnStudentTable.getSelectedRow(), 3)+"')");
-					rs = stmt.executeQuery("SELECT STUDENT.ID, STUDENT.NAME, STUDENT.DEPT, BOOKS.TITLE "
-							 + " FROM STUDENT, BOOKRENT, BOOKS "
-							 + " WHERE STUDENT.ID = BOOKRENT.ID "
-							 + " AND BOOKS.NO = BOOKRENT.BOOKNO");
-					returnStudentModel.setNumRows(0);
-					while(rs.next())
+					Statement stmt = null;
+					ResultSet rs = null;
+					try
 					{
-						String[] row = new String[4];
-						row[0] = rs.getString("ID");
-						row[1] = rs.getString("NAME");
-						row[2] = rs.getString("DEPT");
-						row[3] = rs.getString("TITLE");
-						returnStudentModel.addRow(row);
+						stmt = conn.createStatement();
+						stmt.executeQuery("DELETE FROM BOOKRENT "
+											 + " WHERE ID = '"+tfReturnStudentSearch.getText()+"' "
+											 + " AND BOOKNO = (SELECT NO FROM BOOKS WHERE TITLE= '"
+											 +(String)returnStudentModel.getValueAt(returnStudentTable.getSelectedRow(), 3)+"')");
+						rs = stmt.executeQuery("SELECT STUDENT.ID, STUDENT.NAME, STUDENT.DEPT, BOOKS.TITLE "
+								 + " FROM STUDENT, BOOKRENT, BOOKS "
+								 + " WHERE STUDENT.ID = BOOKRENT.ID "
+								 + " AND BOOKS.NO = BOOKRENT.BOOKNO");
+						returnStudentModel.setNumRows(0);
+						while(rs.next())
+						{
+							String[] row = new String[4];
+							row[0] = rs.getString("ID");
+							row[1] = rs.getString("NAME");
+							row[2] = rs.getString("DEPT");
+							row[3] = rs.getString("TITLE");
+							returnStudentModel.addRow(row);
+						}
+						rs.close();					
 					}
-					rs.close();					
+					catch(Exception e1)
+					{
+						e1.printStackTrace();
+					}
+					tfReturnStudentSearch.setText(null);
 				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-				tfReturnStudentSearch.setText(null);
+				
 			}});
 		JButton btnReturnCancel = new JButton("취소");
 		returnPanel.add(btnReturnCancel);
