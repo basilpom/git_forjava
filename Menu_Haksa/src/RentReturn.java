@@ -120,7 +120,7 @@ public class RentReturn extends JPanel{
 				Statement stmt = null;
 				ResultSet rs = null;
 				try
-				{
+				{ 
 					stmt = conn.createStatement();
 					rs = stmt.executeQuery("SELECT * FROM STUDENT WHERE ID LIKE '%"+tfRentStudentSearch.getText()+"%'");
 					rentStudentModel.setNumRows(0);
